@@ -1,6 +1,7 @@
 import os
 import sys
 from utils.data_loader import load_and_validate_data    
+from utils.analyzer import DataAnalyzer, analyze_data
 
 # create directories if not exist
 def setup_directories():
@@ -41,8 +42,33 @@ def main():
             print(f"Error: {validation['error']}")
         sys.exit(1)
 
-    print ("\n Módulo de datos completado correctamente.")
-    # todo: analysis module
+    # analyze data
+    print("Iniciando análisis de datos...")
+    try:
+        analyzer = DataAnalyzer(df)
+        results = analyzer.full_analysis()
+        
+        # show summary
+
+        print("\n" + "="*50)
+        print("Resumen del Análisis:")
+        print("="*50)
+        metrics = results['summary_metrics']
+        print(f"Clientes Únicos: {metrics['unique_clients']:,}")
+        print(f"Total de Ventas: {metrics['total_sales']:,}")
+        print(f"Ventas Totales sin IGV: ${metrics['total_sales_without_igv']:,.2f}")
+        print(f"Ventas Totales con IGV: ${metrics['total_sales_with_igv']:,.2f}")
+        print(f"Ventas Promedio: ${metrics['average_sales_without_igv']:,.2f}")
+
+        print(f"Modelo Más Vendido: {results['top_models'].index[0]}")
+        print(f"Sede con Más Ventas: {results['sales_without_igv'].index[0]}")
+        print(f"Canal con Más Ventas: {results['sales_by_channel'].index[0]}")
+
+        print ("\n Módulo de datos completado correctamente.")
+    
+    except Exception as e:
+        print(f"Error durante el análisis de datos: {str(e)}")
+        sys.exit(1)
 
 if __name__ == "__main__":
     main()
