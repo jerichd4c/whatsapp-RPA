@@ -2,7 +2,6 @@ import subprocess
 import sys
 import os
 
-
 def run_command(command: str) -> bool:
     """Run a shell command and print it; return True on success, False on failure."""
     try:
@@ -91,7 +90,6 @@ def main():
     configure_chromedriver()
 
     print("\nInstalación de dependencias completada.")
-
 
 if __name__ == "__main__":
     main()

@@ -23,6 +23,7 @@ from twilio.base.exceptions import TwilioRestException
 
 logger = logging.getLogger(__name__)
 
+
 class WhatsAppSender:
 
     # class for sending WhatsApp messages using Twilio API
@@ -143,18 +144,18 @@ class WhatsAppSender:
             # format destiny
             clean_destiny = destiny.replace('+', '').strip()
 
-            # get current time
-            right_now = datetime.now()
-            hour = right_now.hour
-            minute = right_now.minute + 2
+            # Use instant send to avoid scheduling latency and ensure send
+            # wait_time allows WhatsApp Web to load before sending
+            wt = max(10, int(self.config.get('pywhatkit_wait_time', 25)))
+            ct = max(3, int(self.config.get('pywhatkit_close_time', 5)))
+            tc = bool(self.config.get('pywhatkit_tab_close', False))
 
-            if minute >= 60:
-                hour += 1
-                minute -= 60
+            logger.info(f"pywhatkit: wait_time={wt}s, tab_close={tc}, close_time={ct}s")
+            pwk.sendwhatmsg_instantly(f"+{clean_destiny}", message, wait_time=wt, tab_close=tc, close_time=ct)
 
-            # send message
-            pwk.sendwhatmsg(f"+{clean_destiny}", message, hour, minute, wait_time=15)
-
+            # If we keep the tab open, give a short grace period for the Enter key to fire
+            if not tc:
+                time.sleep(ct + 2)
             logger.info(f"Mensaje enviado via pywhatkit a {destiny}.")
             return True
         
@@ -280,11 +281,24 @@ class WhatsAppSender:
                 raise TimeoutException("No se encontró el cuadro de mensaje de WhatsApp Web")
 
             # write and send message with ENTER (more robust than clicking send button)
+            self.selenium_driver.execute_script("arguments[0].focus(); arguments[0].scrollIntoView(true);", message_box)
             message_box.click()
             time.sleep(0.3)
             message_box.send_keys(message)
             time.sleep(0.3)
             message_box.send_keys(Keys.ENTER)
+
+            # Fallback: try clicking the modern send button if available
+            try:
+                send_btn = wait.until(EC.element_to_be_clickable((By.CSS_SELECTOR, 'button[data-testid="compose-btn-send"]')))
+                send_btn.click()
+            except TimeoutException:
+                # Legacy send icon fallback
+                try:
+                    send_btn_legacy = wait.until(EC.element_to_be_clickable((By.XPATH, '//button[@data-icon="send"]')))
+                    send_btn_legacy.click()
+                except TimeoutException:
+                    pass
 
             logger.info(f"Mensaje enviado via Selenium a {destiny}.")
             return True
