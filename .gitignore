@@ -1,0 +1,8 @@
+# Ignore local environment and secret files
+# Local env files (do not commit secrets)
+.env
+*.env
+.env.*
+
+# Specific whatsapp config
+whatsapp_config.env
