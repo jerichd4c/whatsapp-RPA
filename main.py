@@ -142,7 +142,7 @@ def main():
         print(f"Error durante el envío del reporte por WhatsApp: {e}")
         # exit program
 
-    print("PROYECTO COMPLETADO")
+    print("PROCESO COMPLETADO")
 
 if __name__ == "__main__":
     main()

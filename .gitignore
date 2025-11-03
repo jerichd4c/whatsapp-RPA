@@ -12,3 +12,26 @@ __pycache__/
 *.pyc
 *.pyo
 *.pyd
+
+# Data files
+data/*.xlsx
+!data/Ventas Fundamentos.xlsx
+
+# Outputs
+outputs/graficos/*.png
+outputs/*.pdf
+outputs/whatsapp_simulado.txt
+
+# Selenium
+whatsapp_profile/
+chromedriver.log
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Logs
+*.log
+logs/
