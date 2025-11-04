@@ -198,34 +198,35 @@ Puede encontrarlos en la carpeta 'outputs/graphs' del proyecto.
 
             # flatten into one paragraph
             parts = []
-            parts.append("Reporte de análisis de ventas.")
+            parts.append("📊 Reporte de análisis de ventas")
             parts.append(
-                f"Clientes únicos: {metrics['unique_clients']:,}. "
-                f"Total de ventas: {metrics['total_sales']:,}. "
-                f"Ventas totales sin IGV: ${metrics['total_sales_without_igv']:,.2f}. "
-                f"Ventas totales con IGV: ${metrics['total_sales_with_igv']:,.2f}. "
-                f"IGV total recaudado: ${metrics['total_igv_collected']:,.2f}. "
-                f"Venta promedio: ${metrics['average_sales_without_igv']:,.2f}."
+                f"👥 Clientes únicos: {metrics['unique_clients']:,}. "
+                f"🧾 Total de ventas: {metrics['total_sales']:,}. "
+                f"💵 Ventas sin IGV: ${metrics['total_sales_without_igv']:,.2f}. "
+                f"💰 Ventas con IGV: ${metrics['total_sales_with_igv']:,.2f}. "
+                f"🧮 IGV recaudado: ${metrics['total_igv_collected']:,.2f}. "
+                f"📈 Venta promedio: ${metrics['average_sales_without_igv']:,.2f}."
             )
             parts.append(
-                f"Modelo más vendido: {top_models}. "
-                f"Sede con más ventas: {top_headquarter}. "
-                f"Canal con más ventas: {top_channel}."
+                f"🏆 Modelo más vendido: {top_models}. "
+                f"📍 Sede con más ventas: {top_headquarter}. "
+                f"📣 Canal con más ventas: {top_channel}."
             )
 
             # sales by headquarter inline
-            hq_details = ", ".join([f"{hq}: ${sales:,.2f}" for hq, sales in results['sales_by_headquarter'].items()])
-            parts.append(f"Ventas por sede: {hq_details}.")
+            hq_details = ", ".join([f"🏢 {hq}: ${sales:,.2f}" for hq, sales in results['sales_by_headquarter'].items()])
+            parts.append(f"📍 Ventas por sede: {hq_details}.")
 
             # top 5 models inline
             top5 = []
             for i, (model, sales) in enumerate(results['top_models'].items(), 1):
-                top5.append(f"{i}) {model}: ${sales:,.2f}")
+                num_emoji = {1:"1️⃣",2:"2️⃣",3:"3️⃣",4:"4️⃣",5:"5️⃣"}.get(i, f"{i}.")
+                top5.append(f"{num_emoji} {model}: ${sales:,.2f}")
                 if i >= 5:
                     break
-            parts.append("Top 5 modelos: " + "; ".join(top5) + ".")
+            parts.append("🔝 Top 5 modelos: " + "; ".join(top5) + ".")
 
-            parts.append(f"Generado: {self._get_today_date()}.")
+            parts.append(f"🗓️ Generado: {self._get_today_date()}.")
 
             return " ".join(parts)
         
@@ -275,12 +276,12 @@ Puede encontrarlos en la carpeta 'outputs/graphs' del proyecto.
                         media_urls = uploaded
                         # Add URLs to message as a backup reference too
                         urls_text = " ".join(uploaded)
-                        message += f"  Gráficos en línea: {urls_text}"
+                        message += f"  🖼️ Gráficos en línea: {urls_text}"
                 else:
-                    message += "  Los gráficos del análisis se guardaron en la carpeta outputs/graphs."
+                    message += "  🖼️ Los gráficos del análisis se guardaron en la carpeta outputs/graphs."
             except Exception as e:
                 logging.warning(f"No se pudieron subir los gráficos a imgbb: {e}")
-                message += "  Los gráficos del análisis se guardaron en la carpeta outputs/graphs."
+                message += "  🖼️ Los gráficos del análisis se guardaron en la carpeta outputs/graphs."
 
             try:
                 success = self.send_message(message, destiny, linked_file=media_urls)
@@ -324,13 +325,13 @@ Puede encontrarlos en la carpeta 'outputs/graphs' del proyecto.
             # compose simulated message
             message = base_message
             if urls:
-                message += "  Gráficos en línea (simulado): " + " ".join(urls)
+                message += "  🖼️ Gráficos en línea (simulado): " + " ".join(urls)
             else:
                 if graph_files:
-                    # fallback to local file paths if no URLs
-                    message += "  Gráficos locales (simulado): " + " ".join(graph_files)
+                    # Fallback to local file paths if no URLs
+                    message += "  🗂️ Gráficos locales (simulado): " + " ".join(graph_files)
                 else:
-                    message += "  No se encontraron gráficos para adjuntar."
+                    message += "  ⚠️ No se encontraron gráficos para adjuntar."
 
             # write simulation log and message snapshot
             ts = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
@@ -342,7 +343,7 @@ Puede encontrarlos en la carpeta 'outputs/graphs' del proyecto.
             with open('outputs/simulation_message.txt', 'w', encoding='utf-8') as f:
                 f.write(message)
 
-            logger.info("MODO SIMULACIÓN: Mensaje preparado con URLs de gráficos.")
+            logger.info("🧪 MODO SIMULACIÓN: Mensaje preparado con URLs de gráficos.")
             return True
         except Exception as e:
             logger.error(f"Error en simulación con URLs: {e}")
