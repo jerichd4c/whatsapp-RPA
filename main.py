@@ -107,13 +107,12 @@ def main():
 
 
     # send whatsapp report
-    print("Enviando reporte por WhatsApp...")
+    print("Enviando reporte por WhatsApp (Twilio)...")
     try:
         # get whatsapp destiny
         destiny = os.getenv("WHATSAPP_DESTINY")
-        method = os.getenv("WHATSAPP_METHOD", "simulation")  # default to simulation
-
-        print(f"Metodo de envío: {method.upper()}")
+        
+        print("Metodo de envío: TWILIO")
         if destiny:
             print(f"Número de destino: {destiny}")
         else:
@@ -126,15 +125,6 @@ def main():
         # send report
         if send_whatsapp_report(results, destiny):
             print("Reporte enviado exitosamente por WhatsApp.")
-
-            # show simulation message if apllicable
-            if method == "simulation":
-                print("MODO SIMULACION: El reporte no se enviará realmente.")
-                print("Para enviar mensajes reales:")
-                print("1. Configura TWILIO_ACCOUNT_SID y TWILIO_AUTH_TOKEN en .env")
-                print("2. Obtén un número de WhatsApp de Twilio")
-                print("3. Cambia WHATSAPP_METHOD a 'twilio'")
-                print("4. Configura WHATSAPP_DESTINY con tu número")
         
         else:
             print("Error al enviar el reporte por WhatsApp.")

@@ -12,7 +12,6 @@ def run_command(command: str) -> bool:
         print(f"Error ejecutando {command}: {e.stderr}")
         return False
 
-
 def install_requirements() -> None:
     """Install dependencies from requirements.txt if present; fallback to a basic list."""
     req_file = "requirements.txt"
@@ -30,50 +29,10 @@ def install_requirements() -> None:
             "fpdf2==2.7.4",
             "python-dotenv==0.21.0",
             "requests==2.28.2",
-            "selenium==4.15.0",
-            "pywhatkit==5.4",
-            "webdriver-manager==4.0.1",
             "schedule==1.2.0",
         ]
         for dep in dependencies:
             run_command(f"{sys.executable} -m pip install {dep}")
-
-
-def configure_chromedriver() -> None:
-    """Install ChromeDriver via webdriver-manager and write its path into .env."""
-    print("\nConfigurando Chrome Driver...")
-    try:
-        from webdriver_manager.chrome import ChromeDriverManager
-        # from selenium import webdriver  # not actually used here
-
-        driver_path = ChromeDriverManager().install()
-        print(f"Chrome Driver instalado en: {driver_path}")
-
-        # update .env file
-        env_path = ".env"
-        lines = []
-        if os.path.exists(env_path):
-            with open(env_path, "r", encoding="utf-8") as f:
-                lines = f.readlines()
-
-        updated = False
-        for i, line in enumerate(lines):
-            if line.startswith("CHROME_DRIVER_PATH="):
-                lines[i] = f"CHROME_DRIVER_PATH={driver_path}\n"
-                updated = True
-                break
-
-        if not updated:
-            lines.append(f"CHROME_DRIVER_PATH={driver_path}\n")
-
-        with open(env_path, "w", encoding="utf-8") as f:
-            f.writelines(lines)
-
-        print("✅ Ruta de ChromeDriver actualizada en .env")
-
-    except Exception as e:
-        print(f"Error configurando Chrome Driver: {e}")
-
 
 def main():
     print("Instalando dependencias...")
@@ -86,8 +45,7 @@ def main():
     # install dependencies from requirements.txt (preferred)
     install_requirements()
 
-    # install and configure ChromeDriver
-    configure_chromedriver()
+    # Selenium/ChromeDriver no longer required.
 
     print("\nInstalación de dependencias completada.")
 
