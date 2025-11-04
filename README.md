@@ -1,13 +1,13 @@
 # RPA de WhatsApp para Análisis de Ventas 📊
 
-Aplicación en Python que carga datos de ventas, realiza un análisis consolidado, genera gráficas y envía un reporte por WhatsApp a través de Twilio. Si se excede el límite diario de Twilio, el sistema entra en modo simulación y publica las gráficas en imgbb para compartir los enlaces en el mensaje simulado.
+Aplicación en Python que carga datos de ventas, realiza un análisis consolidado, genera gráficas y envía un reporte por WhatsApp a través de Twilio.
 
 - Carga y validación de datos desde Excel (`data/Ventas_Fundamentos.xlsx`)
 - Métricas clave y top de modelos, sedes y canales
 - Generación de gráficas en `outputs/graphs/`
 - Envío de reporte vía WhatsApp con Twilio
 - Hosting opcional de imágenes en imgbb (URLs públicas para adjuntar en WhatsApp)
-- Fallback automático a simulación si Twilio retorna límite diario (error 63038)
+- Fallback automático a simulación si Twilio retorna límite diario (error `63038`)
 
 ---
 
@@ -23,8 +23,7 @@ Dependencias se instalan desde `requirements.txt`.
 ---
 
 ## Instalación 📦
-
-En PowerShell (Windows):
+En **PowerShell** (Windows):
 
 ```powershell
 # 1) Clonar el repositorio
@@ -37,11 +36,8 @@ python -m venv .venv
 
 # 3) Instalar dependencias
 pip install -r requirements.txt
-```
 
-Si prefieres, puedes usar el script auxiliar:
-
-```powershell
+# Alternativa: instalar con script auxiliar
 python install_dependencies.py
 ```
 
@@ -49,17 +45,17 @@ python install_dependencies.py
 
 ## Configuración 🔧
 
-Se usa `python-dotenv` y un archivo `whatsapp_config.env` (no se versiona). Toma como base `whatsapp_config.env.sample`.
+Se usa python-dotenv y un archivo `whatsapp_config.env` (no se versiona). Toma como base `whatsapp_config.env.sample`.
 
 Variables principales:
 
-- `WHATSAPP_DESTINY` Número E.164 de destino (ej: +1234567890)
-- `TWILIO_ACCOUNT_SID` SID de la cuenta Twilio
-- `TWILIO_AUTH_TOKEN` Token de autenticación Twilio
-- `TWILIO_WHATSAPP_FROM` Número WhatsApp de Twilio en formato E.164 (sin el prefijo `whatsapp:`)
-- `IMGBB_API_KEY` (opcional) API key de imgbb para subir imágenes
-- `WHATSAPP_MAX_RETRIES` (opcional) Reintentos en fallas transitorias (default 3)
-- `WHATSAPP_WAIT_TIME` (opcional) Espera entre reintentos en segundos (default 5)
+- `WHATSAPP_DESTINY` — Número E.164 de destino (ej: `+1234567890`)
+- `TWILIO_ACCOUNT_SID` — SID de la cuenta Twilio
+- `TWILIO_AUTH_TOKEN` — Token de autenticación Twilio
+- `TWILIO_WHATSAPP_FROM` — Número WhatsApp de Twilio en formato E.164 (sin el prefijo `whatsapp:`)
+- `IMGBB_API_KEY` (opcional) — API key de imgbb para subir imágenes
+- `WHATSAPP_MAX_RETRIES` (opcional) — Reintentos en fallas transitorias (default `3`)
+- `WHATSAPP_WAIT_TIME` (opcional) — Espera entre reintentos en segundos (default `5`)
 
 ---
 
@@ -108,6 +104,9 @@ utils/
   visualizer.py                 # Gráficas a outputs/graphs
   whatsapp_sender.py            # Envío WhatsApp con Twilio + fallback simulación
   image_uploader.py             # Subida a imgbb
+
+experimental/
+  whatsapp_sender_experimental.py  # Implementaciones archivadas (Selenium/pywhatkit) – no producción
 
 outputs/
   graphs/                       # PNG/JPG de las visualizaciones
