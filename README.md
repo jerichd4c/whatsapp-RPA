@@ -56,6 +56,7 @@ Variables principales:
 - `IMGBB_API_KEY` (opcional) — API key de imgbb para subir imágenes
 - `WHATSAPP_MAX_RETRIES` (opcional) — Reintentos en fallas transitorias (default `3`)
 - `WHATSAPP_WAIT_TIME` (opcional) — Espera entre reintentos en segundos (default `5`)
+- `WHATSAPP_SIMULATE` (opcional) — `true/false` para ejecutar en modo simulación (no usa Twilio). Cuando está activo, el mensaje se escribe en `outputs/simulation_message.txt` y la bitácora en `outputs/simulation_log.txt`. Alternativamente, puedes pasar `--simulate` desde la línea de comandos.
 
 ---
 
